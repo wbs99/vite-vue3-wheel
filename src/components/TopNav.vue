@@ -5,6 +5,9 @@
       <li>菜单1</li>
       <li>菜单2</li>
     </div>
+    <svg class="toggleAside">
+      <use xlink:href="#icon-menu"></use>
+    </svg>
   </div>
 </template>
 
@@ -46,6 +49,7 @@ const toggleAside = () => {
     }
   }
   > .toggleAside {
+    border: 1px solid red;
     display: none;
     width: 30px;
     height: 30px;
