@@ -1,10 +1,15 @@
-<script setup lang="ts"></script>
-
 <template>
   <div>
     <router-view></router-view>
   </div>
 </template>
+
+<script lang="ts" setup>
+import { provide, ref } from "vue";
+
+const asideVisible = ref(true);
+provide("asideVisible", asideVisible);
+</script>
 
 <style scoped>
 .logo {

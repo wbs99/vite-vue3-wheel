@@ -1,12 +1,21 @@
 <template>
   <div class="top-nav">
-    <div class="logo">logo</div>
+    <div class="logo" @click="toggleAside">logo</div>
     <div class="menu">
       <li>菜单1</li>
       <li>菜单2</li>
     </div>
   </div>
 </template>
+
+<script lang="ts" setup>
+import { inject, Ref } from "vue";
+
+const asideVisible = inject<Ref<boolean>>("asideVisible");
+const toggleAside = () => {
+  asideVisible!.value = !asideVisible!.value;
+};
+</script>
 
 <style lang="scss" scoped>
 .top-nav {
@@ -22,22 +31,20 @@
   > .logo {
     max-width: 6em;
     margin-right: auto;
+    cursor: pointer;
     > svg {
       width: 40px;
       height: 40px;
     }
   }
-
   > .menu {
     display: flex;
     white-space: nowrap;
     flex-wrap: wrap;
-
     > li {
       margin: 0 1em;
     }
   }
-
   > .toggleAside {
     display: none;
     width: 30px;
@@ -47,7 +54,6 @@
     top: 50%;
     transform: translateY(-50%);
   }
-
   @media (max-width: 500px) {
     > .menu {
       display: none;
