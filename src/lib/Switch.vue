@@ -1,15 +1,20 @@
 <template>
-  <button
-    :class="[{ checked: isChecked }, type]"
-    :disabled="disabled"
-    @click="toggle"
-  >
-    <span :class="[type]" v-if="type !== 'line'"> </span>
-  </button>
-  <div>{{ props.isChecked }}</div>
+  <div>
+    <button
+      :class="[{ checked: isChecked }, type]"
+      :disabled="disabled"
+      @click="toggle"
+    >
+      <span :class="[type]" v-if="type !== 'line'"> </span>
+    </button>
+    <div>{{ props.isChecked }}</div>
+    <div>传入的值 {{ props.value }}</div>
+  </div>
 </template>
 
 <script lang="ts" setup>
+import { onMounted } from "vue";
+
 const props = defineProps({
   isChecked: {
     type: Boolean,
@@ -23,13 +28,35 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  checkedValue: {
+    type: [String, Number],
+  },
+  uncheckedValue: {
+    type: [String, Number],
+  },
+  value: {
+    type: [String, Number, Boolean],
+    default: "",
+  },
 });
 
-const emit = defineEmits(["update:isChecked"]);
+const emit = defineEmits(["update:isChecked", "updated:value"]);
 
 const toggle = () => {
   emit("update:isChecked", !props.isChecked);
+  if (props.value !== undefined || props.value !== null) {
+    props.isChecked
+      ? emit("updated:value", props.uncheckedValue)
+      : emit("updated:value", props.checkedValue);
+  } else {
+    console.log("没有传 value");
+  }
 };
+onMounted(() => {
+  !props.isChecked
+    ? emit("updated:value", props.uncheckedValue)
+    : emit("updated:value", props.checkedValue);
+});
 </script>
 
 <style lang="scss" scoped>

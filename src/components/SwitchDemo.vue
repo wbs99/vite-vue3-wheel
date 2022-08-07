@@ -1,8 +1,15 @@
 <template>
   <div>
     <Switch v-model:isChecked="value" disabled />
-    <Switch v-model:isChecked="value" :type="type" />
-    <Switch v-model:isChecked="value" :type="type2" />
+    <Switch
+      v-model:isChecked="value"
+      :type="roundType"
+      checked-value="true"
+      unchecked-value="false"
+      :value="value2"
+      @updated:value="onUpdateValue"
+    />
+    <Switch v-model:isChecked="value" :type="lineType" />
   </div>
 </template>
 
@@ -11,8 +18,12 @@ import { ref } from "vue";
 import Switch from "../lib/Switch.vue";
 
 const value = ref(true);
-const type = ref("round");
-const type2 = ref("line");
+const roundType = ref("round");
+const lineType = ref("line");
+const value2 = ref<number | string | boolean>("");
+const onUpdateValue = (xxx: number | string | boolean) => {
+  value2.value = xxx;
+};
 </script>
 
 <style lang="scss" scoped></style>
