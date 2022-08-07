@@ -7,6 +7,10 @@ const routes = <Array<RouteRecordRaw>>[
     component: () => import("../views/Doc.vue"),
     children: [
       {
+        path: "",
+        component: () => import("../components/DocDemo.vue"),
+      },
+      {
         path: "switch",
         component: () => import("../components/SwitchDemo.vue"),
       },
