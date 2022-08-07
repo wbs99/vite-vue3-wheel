@@ -39,11 +39,18 @@ button {
     border-radius: 50%;
     background: #ffffff;
     transition: all 0.2s cubic-bezier(0.34, 0.69, 0.1, 1);
+    &:active {
+      width: 20px;
+    }
   }
   &.checked {
     background: #165dff;
     > span {
       left: calc(100% - 20px);
+      &:active {
+        width: 20px;
+        margin-left: -4px;
+      }
     }
   }
 }
