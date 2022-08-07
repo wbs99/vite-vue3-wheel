@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Switch :isChecked="value" @update:is-checked="onCheckedChange" />
+    <Switch v-model:isChecked="value" />
   </div>
 </template>
 
@@ -9,10 +9,6 @@ import { ref } from "vue";
 import Switch from "../lib/Switch.vue";
 
 const value = ref(false);
-
-const onCheckedChange = (x: boolean) => {
-  value.value = x;
-};
 </script>
 
 <style lang="scss" scoped></style>
