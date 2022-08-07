@@ -1,6 +1,6 @@
 <template>
   <button :class="[{ checked: isChecked }, type]" @click="toggle">
-    <span :class="[type]"> </span>
+    <span :class="[type]" v-if="type !== 'line'"> </span>
   </button>
   <div>{{ props.isChecked }}</div>
 </template>
@@ -37,6 +37,10 @@ button {
   &.round {
     border-radius: 0;
   }
+  &.line {
+    height: 6px;
+    line-height: 6px;
+  }
   > span {
     position: absolute;
     top: 4px;
@@ -52,6 +56,22 @@ button {
     &.round {
       border-radius: 0;
     }
+    &.line {
+      top: -4px;
+    }
+  }
+  &.line::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    transform: translateY(-50%);
+    background-color: #ffffff;
+    transition: all 0.2s cubic-bezier(0.34, 0.69, 0.1, 1);
+    box-shadow: 0 0 2px 2px rgba(134, 144, 156, 0.2);
   }
   &.checked {
     background: #165dff;
@@ -61,6 +81,17 @@ button {
         width: 20px;
         margin-left: -4px;
       }
+    }
+    &.line::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: calc(100% - 18px);
+      width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      transform: translateY(-50%);
+      box-shadow: 0 0 2px 2px rgba(134, 144, 156, 0.2);
     }
   }
 }

@@ -2,6 +2,7 @@
   <div>
     <Switch v-model:isChecked="value" />
     <Switch v-model:isChecked="value" :type="type" />
+    <Switch v-model:isChecked="value" :type="type2" />
   </div>
 </template>
 
@@ -11,6 +12,7 @@ import Switch from "../lib/Switch.vue";
 
 const value = ref(false);
 const type = ref("round");
+const type2 = ref("line");
 </script>
 
 <style lang="scss" scoped></style>
