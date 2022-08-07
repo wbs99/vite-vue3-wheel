@@ -1,6 +1,6 @@
 <template>
-  <button :class="{ checked: props.isChecked }" @click="toggle">
-    <span></span>
+  <button :class="[{ checked: isChecked }, type]" @click="toggle">
+    <span :class="[type]"> </span>
   </button>
   <div>{{ props.isChecked }}</div>
 </template>
@@ -10,6 +10,10 @@ const props = defineProps({
   isChecked: {
     type: Boolean,
     default: false,
+  },
+  type: {
+    type: String,
+    default: "circle",
   },
 });
 
@@ -30,6 +34,9 @@ button {
   cursor: pointer;
   background: #c9cdd4;
   position: relative;
+  &.round {
+    border-radius: 0;
+  }
   > span {
     position: absolute;
     top: 4px;
@@ -41,6 +48,9 @@ button {
     transition: all 0.2s cubic-bezier(0.34, 0.69, 0.1, 1);
     &:active {
       width: 20px;
+    }
+    &.round {
+      border-radius: 0;
     }
   }
   &.checked {
