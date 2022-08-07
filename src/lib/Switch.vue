@@ -1,5 +1,9 @@
 <template>
-  <button :class="[{ checked: isChecked }, type]" @click="toggle">
+  <button
+    :class="[{ checked: isChecked }, type]"
+    :disabled="disabled"
+    @click="toggle"
+  >
     <span :class="[type]" v-if="type !== 'line'"> </span>
   </button>
   <div>{{ props.isChecked }}</div>
@@ -14,6 +18,10 @@ const props = defineProps({
   type: {
     type: String,
     default: "circle",
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -93,6 +101,19 @@ button {
       transform: translateY(-50%);
       box-shadow: 0 0 2px 2px rgba(134, 144, 156, 0.2);
     }
+    &[disabled] {
+      background-color: #94bfff;
+      span {
+        &:active {
+          margin-left: 0;
+          width: 16px;
+        }
+      }
+    }
+  }
+  &[disabled] {
+    background-color: #f2f3f5;
+    cursor: not-allowed;
   }
 }
 </style>
