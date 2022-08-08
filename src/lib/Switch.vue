@@ -4,6 +4,7 @@
       :class="[{ checked: isChecked }, type]"
       :disabled="disabled"
       @click="toggle"
+      ref="buttonRef"
     >
       <span :class="[type]" v-if="type !== 'line'"> </span>
     </button>
@@ -13,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const props = defineProps({
   isChecked: {
@@ -38,8 +39,17 @@ const props = defineProps({
     type: [String, Number, Boolean],
     default: "",
   },
+  checkedColor: {
+    type: String,
+    default: "",
+  },
+  uncheckedColor: {
+    type: String,
+    default: "",
+  },
 });
 
+const buttonRef = ref();
 const emit = defineEmits(["update:isChecked", "updated:value"]);
 
 const toggle = () => {
@@ -56,7 +66,23 @@ onMounted(() => {
   !props.isChecked
     ? emit("updated:value", props.uncheckedValue)
     : emit("updated:value", props.checkedValue);
+
+  if (props.checkedColor || props.uncheckedColor) {
+    buttonRef.value.style.backgroundColor = props.isChecked
+      ? props.checkedColor
+      : props.uncheckedColor;
+  }
 });
+watch(
+  () => props.isChecked,
+  isChecked => {
+    if (props.checkedColor || props.uncheckedColor) {
+      buttonRef.value.style.backgroundColor = isChecked
+        ? props.checkedColor
+        : props.uncheckedColor;
+    }
+  }
+);
 </script>
 
 <style lang="scss" scoped>

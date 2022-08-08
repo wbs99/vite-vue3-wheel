@@ -10,6 +10,11 @@
       @updated:value="onUpdateValue"
     />
     <Switch v-model:isChecked="value" :type="lineType" />
+    <Switch
+      v-model:isChecked="value"
+      checked-color="#F53F3F"
+      unchecked-color="#14C9C9"
+    />
   </div>
 </template>
 
