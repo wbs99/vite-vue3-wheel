@@ -1,7 +1,11 @@
 <template>
-  <div>buttonDemo</div>
+  <div>
+    <Button>你好啊</Button>
+  </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import Button from "../lib/Button.vue";
+</script>
 
 <style lang="scss" scoped></style>
