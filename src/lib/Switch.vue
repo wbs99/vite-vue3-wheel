@@ -1,7 +1,8 @@
 <template>
   <div>
     <button
-      :class="[{ checked: isChecked }, type]"
+      class="w-switch"
+      :class="[{ 'w-checked': isChecked }, type]"
       :disabled="disabled"
       @click="toggle"
       ref="buttonRef"
@@ -9,7 +10,7 @@
       <span :class="[type]" v-if="type !== 'line'"> </span>
     </button>
     <div>{{ props.isChecked }}</div>
-    <div>传入的值 {{ props.value }}</div>
+    <!-- <div>传入的值 {{ props.value }}</div> -->
   </div>
 </template>
 
@@ -85,8 +86,8 @@ watch(
 );
 </script>
 
-<style lang="scss" scoped>
-button {
+<style lang="scss">
+.w-switch {
   min-width: 40px;
   height: 24px;
   line-height: 24px;
@@ -134,7 +135,7 @@ button {
     transition: all 0.2s cubic-bezier(0.34, 0.69, 0.1, 1);
     box-shadow: 0 0 2px 2px rgba(134, 144, 156, 0.2);
   }
-  &.checked {
+  &.w-checked {
     background: #165dff;
     > span {
       left: calc(100% - 20px);

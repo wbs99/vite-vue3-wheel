@@ -1,6 +1,13 @@
 <template>
   <div>
-    <Button @click="onClick" @mouseover="onMouseOver" size="size">
+    <Button @click="onClick" @mouseover="onMouseOver"> 你好啊 </Button>
+    <Button @click="onClick" @mouseover="onMouseOver" theme="button">
+      你好啊
+    </Button>
+    <Button @click="onClick" @mouseover="onMouseOver" theme="text">
+      你好啊
+    </Button>
+    <Button @click="onClick" @mouseover="onMouseOver" theme="link">
       你好啊
     </Button>
   </div>
