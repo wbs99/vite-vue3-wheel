@@ -10,7 +10,7 @@
       <span :class="[type]" v-if="type !== 'line'"> </span>
     </button>
     <div>{{ props.isChecked }}</div>
-    <!-- <div>传入的值 {{ props.value }}</div> -->
+    <div>传入的值 {{ props.value }}</div>
   </div>
 </template>
 
@@ -51,22 +51,22 @@ const props = defineProps({
 });
 
 const buttonRef = ref();
-const emit = defineEmits(["update:isChecked", "updated:value"]);
+const emit = defineEmits(["update:isChecked", "update:value"]);
 
 const toggle = () => {
   emit("update:isChecked", !props.isChecked);
   if (props.value !== undefined || props.value !== null) {
     props.isChecked
-      ? emit("updated:value", props.uncheckedValue)
-      : emit("updated:value", props.checkedValue);
+      ? emit("update:value", props.uncheckedValue)
+      : emit("update:value", props.checkedValue);
   } else {
     console.log("没有传 value");
   }
 };
 onMounted(() => {
   !props.isChecked
-    ? emit("updated:value", props.uncheckedValue)
-    : emit("updated:value", props.checkedValue);
+    ? emit("update:value", props.uncheckedValue)
+    : emit("update:value", props.checkedValue);
 
   if (props.checkedColor || props.uncheckedColor) {
     buttonRef.value.style.backgroundColor = props.isChecked
