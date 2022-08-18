@@ -11,7 +11,7 @@ import { computed } from "vue";
 const props = defineProps({
   theme: {
     type: String,
-    default: "button",
+    default: "primary",
   },
   size: {
     type: String,
