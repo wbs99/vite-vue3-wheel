@@ -22,12 +22,19 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue"
+import { onMounted, reactive } from "vue"
+import dayjs from "dayjs"
 
 const monthList = reactive<number[]>([])
-for (let i = 0; i < 42; i++) {
-  monthList.push(i)
-}
+
+onMounted(() => {
+  const firstDayOfWeek = dayjs("2022-9-1").day()
+
+  for (let i = 1; i <= dayjs("2022-9-1").daysInMonth(); i++) {
+    monthList.push(i)
+  }
+  console.log(firstDayOfWeek)
+})
 </script>
 
 <style lang="scss" scoped>
