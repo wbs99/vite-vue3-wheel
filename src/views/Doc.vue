@@ -21,17 +21,8 @@
         </ol>
         <h3>组件列表</h3>
         <ol>
-          <li>
-            <router-link to="/doc/switch">Switch 开关</router-link>
-          </li>
-          <li>
-            <router-link to="/doc/button">Button 按钮</router-link>
-          </li>
-          <li>
-            <router-link to="/doc/dialog">Dialog 对话框</router-link>
-          </li>
-          <li>
-            <router-link to="/doc/tabs">Tabs 标签页</router-link>
+          <li v-for="item in routerList" :key="item.routerName">
+            <router-link :to="item.router">{{ item.routerName }}</router-link>
           </li>
         </ol>
       </aside>
@@ -43,10 +34,32 @@
 </template>
 
 <script lang="ts" setup>
-import TopNav from "../components/TopNav.vue";
-import { inject, Ref } from "vue";
+import TopNav from "../components/TopNav.vue"
+import { inject, reactive, Ref } from "vue"
 
-const asideVisible = inject<Ref<boolean>>("asideVisible");
+const asideVisible = inject<Ref<boolean>>("asideVisible")
+const routerList = reactive<{ router: string; routerName: string }[]>([
+  {
+    router: "/doc/switch",
+    routerName: "Switch 开关",
+  },
+  {
+    router: "/doc/button",
+    routerName: "Button 按钮",
+  },
+  {
+    router: "/doc/dialog",
+    routerName: "Dialog 对话框",
+  },
+  {
+    router: "/doc/tabs",
+    routerName: "Tabs 标签页",
+  },
+  {
+    router: "/doc/calendar",
+    routerName: "calendar 日历",
+  },
+])
 </script>
 
 <style lang="scss" scoped>
@@ -54,11 +67,9 @@ const asideVisible = inject<Ref<boolean>>("asideVisible");
   display: flex;
   flex-direction: column;
   height: 100vh;
-
   > .nav {
     flex-shrink: 0;
   }
-
   > .content {
     flex-grow: 1;
     padding-top: 60px;
