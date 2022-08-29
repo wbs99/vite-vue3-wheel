@@ -49,6 +49,13 @@ interface dateType {
   selectedDay?: boolean
 }
 
+const props = defineProps({
+  defaultDate: {
+    type: String,
+    default: "",
+  },
+})
+
 const state = reactive({
   monthList: [] as dateType[],
 })
@@ -138,8 +145,13 @@ const onBackToday = () => {
 }
 
 onMounted(() => {
-  currentTime.value = dayjs(new Date()).format("YYYY-MM")
-  rendTime(currentTime.value)
+  if (props.defaultDate === "") {
+    currentTime.value = dayjs(new Date()).format("YYYY-MM")
+    rendTime(currentTime.value)
+  } else {
+    currentTime.value = dayjs(props.defaultDate).format("YYYY-MM")
+    rendTime(currentTime.value)
+  }
 })
 </script>
 
