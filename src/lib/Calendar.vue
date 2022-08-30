@@ -41,6 +41,7 @@ import { onMounted, reactive, ref } from "vue"
 import dayjs from "dayjs"
 
 interface dateType {
+  completeTime: string
   date: string | number
   prevDay?: boolean
   nextDay?: boolean
@@ -64,13 +65,8 @@ const currentTime = ref("")
 
 const rendTime = (time: string) => {
   const today = dayjs(time).format("YYYY-MM-DD")
-  console.log(time)
-
-  console.log()
-
   const firstDayOfMonth = dayjs(time).startOf("month")
   const firstDayOfWeek = dayjs(firstDayOfMonth).day()
-
   // 计算当月多少天
   for (let i = 1; i <= dayjs(firstDayOfMonth).daysInMonth(); i++) {
     // 判断是不是今天
@@ -78,9 +74,18 @@ const rendTime = (time: string) => {
       `${time}-${i}` === dayjs(new Date()).format("YYYY-MM-DD") ||
       `${time}-${i}` === dayjs(new Date()).format("YYYY-MM-D")
     ) {
-      state.monthList.push({ date: i, currentDay: true, today: true })
+      state.monthList.push({
+        completeTime: dayjs(`${currentTime.value}-${i}`).format("YYYY-MM-DD"),
+        date: i,
+        currentDay: true,
+        today: true,
+      })
     } else {
-      state.monthList.push({ date: i, currentDay: true })
+      state.monthList.push({
+        completeTime: dayjs(`${currentTime.value}-${i}`).format("YYYY-MM-DD"),
+        date: i,
+        currentDay: true,
+      })
     }
 
     count.value += 1
@@ -89,6 +94,9 @@ const rendTime = (time: string) => {
   if (firstDayOfWeek === 0) {
     for (let i = 1; i < 7; i++) {
       state.monthList.unshift({
+        completeTime: dayjs(`${currentTime.value}-${i}`)
+          .subtract(1, "month")
+          .format("YYYY-MM-DD"),
         date: dayjs(firstDayOfMonth)
           .startOf("month")
           .subtract(i, "day")
@@ -100,6 +108,9 @@ const rendTime = (time: string) => {
   } else {
     for (let i = 1; i < firstDayOfWeek; i++) {
       state.monthList.unshift({
+        completeTime: dayjs(`${currentTime.value}-${i}`)
+          .subtract(1, "month")
+          .format("YYYY-MM-DD"),
         date: dayjs(firstDayOfMonth)
           .startOf("month")
           .subtract(i, "day")
@@ -112,10 +123,15 @@ const rendTime = (time: string) => {
   // 计算后面需要铺垫多少天
   for (let i = 1; i <= 42 - count.value; i++) {
     state.monthList.push({
+      completeTime: dayjs(`${currentTime.value}-${i}`)
+        .add(1, "month")
+        .format("YYYY-MM-DD"),
       date: dayjs(firstDayOfMonth).endOf("month").add(i, "day").format("D"),
       nextDay: true,
     })
   }
+
+  console.log(state.monthList)
   count.value = 0
 }
 
@@ -134,8 +150,20 @@ const onPrevMonthClick = () => {
 }
 
 const onDayClick = (e: dateType) => {
-  state.monthList.map(item => (item.selectedDay = false))
-  e.selectedDay = true
+  if (
+    e.completeTime.substring(0, 7) ===
+    dayjs(currentTime.value).add(1, "month").format("YYYY-MM")
+  ) {
+    onNextMonthClick()
+  } else if (
+    e.completeTime.substring(0, 7) ===
+    dayjs(currentTime.value).subtract(1, "month").format("YYYY-MM")
+  ) {
+    onPrevMonthClick()
+  } else {
+    state.monthList.map(item => (item.selectedDay = false))
+    e.selectedDay = true
+  }
 }
 
 const onBackToday = () => {
