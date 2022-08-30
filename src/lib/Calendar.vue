@@ -57,6 +57,14 @@ const props = defineProps({
   },
 })
 
+onMounted(() => {
+  if (props.defaultDate === "") {
+    injectTimeAndRender(dayjs(new Date()).format("YYYY-MM"))
+  } else {
+    injectTimeAndRender(dayjs(props.defaultDate).format("YYYY-MM"))
+  }
+})
+
 const state = reactive({
   monthList: [] as dateType[],
 })
@@ -64,7 +72,6 @@ const count = ref(0)
 const currentTime = ref("")
 
 const rendTime = (time: string) => {
-  const today = dayjs(time).format("YYYY-MM-DD")
   const firstDayOfMonth = dayjs(time).startOf("month")
   const firstDayOfWeek = dayjs(firstDayOfMonth).day()
   // 计算当月多少天
@@ -136,29 +143,24 @@ const rendTime = (time: string) => {
       nextDay: true,
     })
   }
-
-  console.log(state.monthList)
   count.value = 0
 }
 
 const onNextMonthClick = () => {
   state.monthList = []
-  currentTime.value = dayjs(currentTime.value).add(1, "month").format("YYYY-MM")
-  rendTime(currentTime.value)
+  injectTimeAndRender(
+    dayjs(currentTime.value).add(1, "month").format("YYYY-MM")
+  )
 }
 
 const onPrevMonthClick = () => {
   state.monthList = []
-  currentTime.value = dayjs(currentTime.value)
-    .subtract(1, "month")
-    .format("YYYY-MM")
-  rendTime(currentTime.value)
+  injectTimeAndRender(
+    dayjs(currentTime.value).subtract(1, "month").format("YYYY-MM")
+  )
 }
 
 const onDayClick = (e: dateType) => {
-  console.log(888)
-  console.log(e)
-
   if (
     e.completeTime.substring(0, 7) ===
     dayjs(currentTime.value).add(1, "month").format("YYYY-MM")
@@ -187,19 +189,13 @@ const onDayClick = (e: dateType) => {
 
 const onBackToday = () => {
   state.monthList = []
-  currentTime.value = dayjs(new Date()).format("YYYY-MM")
-  rendTime(currentTime.value)
+  injectTimeAndRender(dayjs(new Date()).format("YYYY-MM"))
 }
 
-onMounted(() => {
-  if (props.defaultDate === "") {
-    currentTime.value = dayjs(new Date()).format("YYYY-MM")
-    rendTime(currentTime.value)
-  } else {
-    currentTime.value = dayjs(props.defaultDate).format("YYYY-MM")
-    rendTime(currentTime.value)
-  }
-})
+const injectTimeAndRender = (time: string) => {
+  currentTime.value = time
+  rendTime(currentTime.value)
+}
 </script>
 
 <style lang="scss" scoped>
