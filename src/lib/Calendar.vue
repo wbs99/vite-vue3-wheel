@@ -94,8 +94,10 @@ const rendTime = (time: string) => {
   if (firstDayOfWeek === 0) {
     for (let i = 1; i < 7; i++) {
       state.monthList.unshift({
-        completeTime: dayjs(`${currentTime.value}-${i}`)
+        completeTime: dayjs(currentTime.value)
           .subtract(1, "month")
+          .endOf("month")
+          .subtract(i - 1, "day")
           .format("YYYY-MM-DD"),
         date: dayjs(firstDayOfMonth)
           .startOf("month")
@@ -108,8 +110,10 @@ const rendTime = (time: string) => {
   } else {
     for (let i = 1; i < firstDayOfWeek; i++) {
       state.monthList.unshift({
-        completeTime: dayjs(`${currentTime.value}-${i}`)
+        completeTime: dayjs(currentTime.value)
           .subtract(1, "month")
+          .endOf("month")
+          .subtract(i - 1, "day")
           .format("YYYY-MM-DD"),
         date: dayjs(firstDayOfMonth)
           .startOf("month")
@@ -123,8 +127,10 @@ const rendTime = (time: string) => {
   // 计算后面需要铺垫多少天
   for (let i = 1; i <= 42 - count.value; i++) {
     state.monthList.push({
-      completeTime: dayjs(`${currentTime.value}-${i}`)
+      completeTime: dayjs(currentTime.value)
         .add(1, "month")
+        .startOf("month")
+        .add(i - 1, "day")
         .format("YYYY-MM-DD"),
       date: dayjs(firstDayOfMonth).endOf("month").add(i, "day").format("D"),
       nextDay: true,
@@ -150,16 +156,29 @@ const onPrevMonthClick = () => {
 }
 
 const onDayClick = (e: dateType) => {
+  console.log(888)
+  console.log(e)
+
   if (
     e.completeTime.substring(0, 7) ===
     dayjs(currentTime.value).add(1, "month").format("YYYY-MM")
   ) {
     onNextMonthClick()
+    state.monthList.map(item => {
+      if (item.completeTime === e.completeTime) {
+        item.selectedDay = true
+      }
+    })
   } else if (
     e.completeTime.substring(0, 7) ===
     dayjs(currentTime.value).subtract(1, "month").format("YYYY-MM")
   ) {
     onPrevMonthClick()
+    state.monthList.map(item => {
+      if (item.completeTime === e.completeTime) {
+        item.selectedDay = true
+      }
+    })
   } else {
     state.monthList.map(item => (item.selectedDay = false))
     e.selectedDay = true
