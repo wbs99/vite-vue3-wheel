@@ -26,9 +26,11 @@
       </ul>
     </div>
     <div class="w-calendar-footer">
+      <span @click="onPrevYearClick">上一年</span>
       <span @click="onPrevMonthClick">上个月</span>
       <span @click="onBackToday">今天</span>
       <span @click="onNextMonthClick">下个月</span>
+      <span @click="onNextYearClick">下一年</span>
     </div>
   </div>
 </template>
@@ -171,10 +173,22 @@ const rendTime = (time: string) => {
   count.value = 0
 }
 
+const onNextYearClick = () => {
+  state.monthList = []
+  injectTimeAndRender(dayjs(currentTime.value).add(1, "year").format("YYYY-MM"))
+}
+
 const onNextMonthClick = () => {
   state.monthList = []
   injectTimeAndRender(
     dayjs(currentTime.value).add(1, "month").format("YYYY-MM")
+  )
+}
+
+const onPrevYearClick = () => {
+  state.monthList = []
+  injectTimeAndRender(
+    dayjs(currentTime.value).subtract(1, "year").format("YYYY-MM")
   )
 }
 
