@@ -2,14 +2,11 @@
   <div class="w-calendar-wrapper">
     <div class="w-calendar-header">{{ currentTime }}</div>
     <div class="w-calendar-main">
-      <ul class="w-calendar-main-week">
-        <li>一</li>
-        <li>二</li>
-        <li>三</li>
-        <li>四</li>
-        <li>五</li>
-        <li>六</li>
-        <li>日</li>
+      <ul class="w-calendar-main-week" v-if="props.dayStartOfWeek === 0">
+        <li v-for="item in state.weekFromSunday" :key="item">{{ item }}</li>
+      </ul>
+      <ul class="w-calendar-main-week" v-if="props.dayStartOfWeek === 1">
+        <li v-for="item in state.weekFromMonday" :key="item">{{ item }}</li>
       </ul>
       <ul class="w-calendar-main-month">
         <li
@@ -55,6 +52,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  dayStartOfWeek: {
+    type: Number,
+    default: 0,
+  },
 })
 
 onMounted(() => {
@@ -67,6 +68,8 @@ onMounted(() => {
 
 const state = reactive({
   monthList: [] as dateType[],
+  weekFromMonday: ["一", "二", "三", "四", "五", "六", "日"] as string[],
+  weekFromSunday: ["日", "一", "二", "三", "四", "五", "六"] as string[],
 })
 const count = ref(0)
 const currentTime = ref("")
@@ -98,39 +101,60 @@ const rendTime = (time: string) => {
     count.value += 1
   }
   // 计算前面需要铺垫多少天
-  if (firstDayOfWeek === 0) {
-    for (let i = 1; i < 7; i++) {
-      state.monthList.unshift({
-        completeTime: dayjs(currentTime.value)
-          .subtract(1, "month")
-          .endOf("month")
-          .subtract(i - 1, "day")
-          .format("YYYY-MM-DD"),
-        date: dayjs(firstDayOfMonth)
-          .startOf("month")
-          .subtract(i, "day")
-          .format("DD"),
-        prevDay: true,
-      })
-      count.value += 1
+  if (props.dayStartOfWeek === 1) {
+    if (firstDayOfWeek === 0) {
+      for (let i = 1; i < 7; i++) {
+        state.monthList.unshift({
+          completeTime: dayjs(currentTime.value)
+            .subtract(1, "month")
+            .endOf("month")
+            .subtract(i - 1, "day")
+            .format("YYYY-MM-DD"),
+          date: dayjs(firstDayOfMonth)
+            .startOf("month")
+            .subtract(i, "day")
+            .format("DD"),
+          prevDay: true,
+        })
+        count.value += 1
+      }
+    } else {
+      for (let i = 1; i < firstDayOfWeek; i++) {
+        state.monthList.unshift({
+          completeTime: dayjs(currentTime.value)
+            .subtract(1, "month")
+            .endOf("month")
+            .subtract(i - 1, "day")
+            .format("YYYY-MM-DD"),
+          date: dayjs(firstDayOfMonth)
+            .startOf("month")
+            .subtract(i, "day")
+            .format("DD"),
+          prevDay: true,
+        })
+        count.value += 1
+      }
     }
   } else {
-    for (let i = 1; i < firstDayOfWeek; i++) {
-      state.monthList.unshift({
-        completeTime: dayjs(currentTime.value)
-          .subtract(1, "month")
-          .endOf("month")
-          .subtract(i - 1, "day")
-          .format("YYYY-MM-DD"),
-        date: dayjs(firstDayOfMonth)
-          .startOf("month")
-          .subtract(i, "day")
-          .format("DD"),
-        prevDay: true,
-      })
-      count.value += 1
+    if (firstDayOfWeek !== 0) {
+      for (let i = 1; i <= firstDayOfWeek; i++) {
+        state.monthList.unshift({
+          completeTime: dayjs(currentTime.value)
+            .subtract(1, "month")
+            .endOf("month")
+            .subtract(i - 1, "day")
+            .format("YYYY-MM-DD"),
+          date: dayjs(firstDayOfMonth)
+            .startOf("month")
+            .subtract(i, "day")
+            .format("DD"),
+          prevDay: true,
+        })
+        count.value += 1
+      }
     }
   }
+
   // 计算后面需要铺垫多少天
   for (let i = 1; i <= 42 - count.value; i++) {
     state.monthList.push({
@@ -143,6 +167,7 @@ const rendTime = (time: string) => {
       nextDay: true,
     })
   }
+
   count.value = 0
 }
 
@@ -252,7 +277,8 @@ const injectTimeAndRender = (time: string) => {
   }
   > .w-calendar-footer {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    cursor: pointer;
   }
 }
 </style>
