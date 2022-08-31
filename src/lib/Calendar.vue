@@ -61,11 +61,9 @@ const props = defineProps({
 })
 
 onMounted(() => {
-  if (props.defaultDate === "") {
-    injectTimeAndRender(dayjs(new Date()).format("YYYY-MM"))
-  } else {
-    injectTimeAndRender(dayjs(props.defaultDate).format("YYYY-MM"))
-  }
+  props.defaultDate === ""
+    ? injectTimeAndRender(dayjs(new Date()).format("YYYY-MM"))
+    : injectTimeAndRender(dayjs(props.defaultDate).format("YYYY-MM"))
 })
 
 const state = reactive({
@@ -206,9 +204,7 @@ const onDayClick = (e: dateType) => {
   ) {
     onNextMonthClick()
     state.monthList.map(item => {
-      if (item.completeTime === e.completeTime) {
-        item.selectedDay = true
-      }
+      item.completeTime === e.completeTime && (item.selectedDay = true)
     })
   } else if (
     e.completeTime.substring(0, 7) ===
@@ -216,9 +212,7 @@ const onDayClick = (e: dateType) => {
   ) {
     onPrevMonthClick()
     state.monthList.map(item => {
-      if (item.completeTime === e.completeTime) {
-        item.selectedDay = true
-      }
+      item.completeTime === e.completeTime && (item.selectedDay = true)
     })
   } else {
     state.monthList.map(item => (item.selectedDay = false))
