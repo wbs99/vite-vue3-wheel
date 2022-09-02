@@ -1,4 +1,4 @@
-import { createWebHashHistory, createRouter, RouteRecordRaw } from "vue-router";
+import { createWebHashHistory, createRouter, RouteRecordRaw } from "vue-router"
 
 const routes = <Array<RouteRecordRaw>>[
   { path: "/", component: () => import("../views/Home.vue") },
@@ -26,12 +26,16 @@ const routes = <Array<RouteRecordRaw>>[
         path: "tabs",
         component: () => import("../components/TabsDemo.vue"),
       },
+      {
+        path: "calendar",
+        component: () => import("../components/CalendarDemo.vue"),
+      },
     ],
   },
-];
+]
 const router = createRouter({
   history: createWebHashHistory(),
   routes: routes,
-});
+})
 
-export default router;
+export default router

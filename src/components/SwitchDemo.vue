@@ -4,10 +4,9 @@
     <Switch
       v-model:isChecked="value"
       :type="roundType"
-      checked-value="true"
-      unchecked-value="false"
-      :value="value2"
-      @updated:value="onUpdateValue"
+      checkedValue="yes"
+      uncheckedValue="no"
+      v-model:value="value2"
     />
     <Switch v-model:isChecked="value" :type="lineType" />
     <Switch
@@ -26,9 +25,6 @@ const value = ref(true);
 const roundType = ref("round");
 const lineType = ref("line");
 const value2 = ref<number | string | boolean>("");
-const onUpdateValue = (xxx: number | string | boolean) => {
-  value2.value = xxx;
-};
 </script>
 
 <style lang="scss" scoped></style>
