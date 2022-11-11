@@ -59,6 +59,11 @@ const routerList = reactive<{ router: string; routerName: string }[]>([
     router: "/doc/calendar",
     routerName: "calendar 日历",
   },
+  {
+    router: "/doc/carousel",
+    routerName: "Carousel 轮播",
+  },
+
 ])
 </script>
 

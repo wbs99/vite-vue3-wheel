@@ -30,6 +30,10 @@ const routes = <Array<RouteRecordRaw>>[
         path: "calendar",
         component: () => import("../components/CalendarDemo.vue"),
       },
+      {
+        path: "carousel",
+        component: () => import("../components/CarouselDemo.vue"),
+      },
     ],
   },
 ]
