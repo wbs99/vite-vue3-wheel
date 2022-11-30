@@ -63,7 +63,10 @@ const routerList = reactive<{ router: string; routerName: string }[]>([
     router: "/doc/carousel",
     routerName: "Carousel 轮播",
   },
-
+  {
+    router: "/doc/pagination",
+    routerName: "Pagination分页",
+  },
 ])
 </script>
 

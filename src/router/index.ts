@@ -34,6 +34,10 @@ const routes = <Array<RouteRecordRaw>>[
         path: "carousel",
         component: () => import("../components/CarouselDemo.vue"),
       },
+      {
+        path: "pagination",
+        component: () => import("../components/PaginationDemo.vue"),
+      },
     ],
   },
 ]
