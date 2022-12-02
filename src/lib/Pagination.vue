@@ -1,11 +1,11 @@
 <template>
   <ul class="w-pagination">
-    <li class="prev" :class="{ disabled: currentPage === 1 }">
+    <li class="prev" :class="{ disabled: currentPage === 1 }" @click="onClickPage(currentPage-1)">
       <Icon name="left" />
     </li>
-    <template v-for="page in pages" :key="page">
+    <template v-for="page in pages" :key="page" >
       <template v-if="page === currentPage">
-        <li class="w-pagination-item current">{{ page }}</li>
+        <li class="w-pagination-item current" >{{ page }}</li>
       </template>
       <template v-else-if="page === '...'">
         <li class="w-pagination-item separator">
@@ -13,17 +13,17 @@
         </li>
       </template>
       <template v-else>
-        <li class="w-pagination-item other">{{ page }}</li>
+        <li class="w-pagination-item other" @click="onClickPage(page)">{{ page }}</li>
       </template>
     </template>
-    <li class="next" :class="{ disabled: currentPage === totalPage }">
+    <li class="next" :class="{ disabled: currentPage === totalPage }" @click="onClickPage(currentPage+1)">
       <Icon name="right" />
     </li>
   </ul>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive } from "vue";
+import { computed, onMounted, reactive } from "vue";
 import Icon from "../components/Icon.vue";
 
 const props = defineProps({
@@ -39,35 +39,7 @@ const props = defineProps({
     type: Boolean,
   },
 });
-
-const pages = reactive<any[]>([]);
-onMounted(() => {
-  const data = [
-    1,
-    props.totalPage,
-    props.currentPage,
-    props.currentPage - 1,
-    props.currentPage - 2,
-    props.currentPage + 1,
-    props.currentPage + 2,
-  ];
-  Object.assign(
-    pages,
-    unique(
-      data.filter((item) => item >= 1 && item <= props.totalPage).sort((a, b) => a - b)
-    )
-  );
-  Object.assign(
-    pages,
-    pages.reduce((result, item, index) => {
-      pages[index + 1] !== undefined && pages[index + 1] - pages[index] > 1
-        ? result.push(item, "...")
-        : result.push(item);
-      return result;
-    }, [])
-  );
-});
-
+const emit = defineEmits(['update:currentPage'])
 const unique = (array: number[]) => {
   const map = new Map();
   for (let i = 0; i < array.length; i++) {
@@ -79,6 +51,31 @@ const unique = (array: number[]) => {
   }
   return [...map.keys()];
 };
+
+const pages = computed(()=>{
+  const data = unique([
+    1,
+    props.totalPage,
+    props.currentPage,
+    props.currentPage - 1,
+    props.currentPage - 2,
+    props.currentPage + 1,
+    props.currentPage + 2,
+  ].filter((item) => item >= 1 && item <= props.totalPage).sort((a, b) => a - b))
+    .reduce((prev:any, current, index,array) => {
+    array[index + 1] !== undefined && array[index + 1] - array[index] > 1
+      ? prev.push(current, "...")
+      : prev.push(current);
+    return prev;
+  }, [])
+  return data
+})
+const onClickPage = (n:number)=>{
+  if(n>=1&&n<=props.totalPage){
+    emit('update:currentPage', n)
+
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -116,8 +113,7 @@ const unique = (array: number[]) => {
     }
   }
 }
-.prev,
-.next {
+.prev,.next {
   display: flex;
   justify-content: center;
   align-items: center;
