@@ -38,6 +38,10 @@ const routes = <Array<RouteRecordRaw>>[
         path: "pagination",
         component: () => import("../components/PaginationDemo.vue"),
       },
+      {
+        path: "upload",
+        component: () => import("../components/UploadDemo.vue"),
+      },
     ],
   },
 ]
