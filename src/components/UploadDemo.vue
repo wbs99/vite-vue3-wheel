@@ -15,15 +15,15 @@
 <script lang="ts" setup>
 import { reactive } from "vue";
 import Upload from "../lib/Upload.vue";
-import { FileList } from "../lib/Upload.vue";
+import { FileType } from "../lib/Upload.vue";
 
-const fileList = reactive<FileList[]>([]);
+const fileList = reactive<FileType[]>([]);
 const parseResponse = (response: any) => {
   const object = JSON.parse(response);
   const url = `http://127.0.0.1:3000/preview/${object.id}`;
   return url;
 };
-const updateFileList = (value: any) => {
+const updateFileList = (value: FileType[]) => {
   Object.assign(fileList, value);
 };
 </script>

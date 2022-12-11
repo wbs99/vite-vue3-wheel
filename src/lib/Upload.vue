@@ -7,7 +7,9 @@
     <ol>
       <li v-for="(file, index) in fileList" :key="index">
         <img :src="file.url" width="100" height="100" />
+
         {{ file.name }}
+        <button @click="onRemoveFile(file)">删除</button>
       </li>
     </ol>
   </div>
@@ -16,7 +18,7 @@
 <script lang="ts" setup>
 import { PropType, ref } from "vue";
 
-export interface FileList {
+export interface FileType {
   name: string;
   size: string;
   type: string;
@@ -41,7 +43,7 @@ const props = defineProps({
     required: true,
   },
   fileList: {
-    type: Array as PropType<FileList[]>,
+    type: Array as PropType<FileType[]>,
     default: () => [],
   },
 });
@@ -90,6 +92,12 @@ const doUploadFile = (formData: any, success: Function) => {
     success(xhr.response);
   };
   xhr.send(formData);
+};
+const onRemoveFile = (file: FileType) => {
+  const fileCopyList = props.fileList;
+  const fileIndex = fileCopyList.indexOf(file);
+  fileCopyList.splice(fileIndex, 1);
+  emit("update:fileList", fileCopyList);
 };
 </script>
 
