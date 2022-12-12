@@ -1,13 +1,6 @@
 <template>
-  <Upload
-    name="file"
-    accept="image/*"
-    method="POST"
-    :fileList="fileList"
-    @update:fileList="updateFileList"
-    action="http://127.0.0.1:3000/upload"
-    :parseResponse="parseResponse"
-  >
+  <Upload name="file" accept="image/*" method="POST" :fileList="fileList" @update:fileList="updateFileList"
+    action="http://127.0.0.1:3000/upload" :parseResponse="parseResponse">
     <button>上传</button>
   </Upload>
 </template>
