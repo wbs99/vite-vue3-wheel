@@ -3,6 +3,7 @@
     <div @click="onClickUpload">
       <slot></slot>
     </div>
+    <slot name="tips"></slot>
     <ol class="w-upload-fileList">
       <li v-for="(file, index) in fileList" :key="index">
         <template v-if="file.status === 'uploading'">
@@ -55,11 +56,16 @@ const props = defineProps({
     type: Array as PropType<FileType[]>,
     default: () => [],
   },
+  sizeLimit: {
+    type: Number,
+    default: 2
+  }
 });
-const emit = defineEmits(["update:fileList"]);
+const emit = defineEmits(["update:fileList", 'onUploadError']);
 const temp = ref<HTMLElement | null>(null);
 
 const createInput = () => {
+  temp.value!.innerHTML = ''
   const input = document.createElement("input");
   input.type = "file";
   temp.value?.appendChild(input);
@@ -94,7 +100,13 @@ const onRemoveFile = (file: FileType) => {
 };
 const beforeUploadFile = (rawFile: FileType, newName: string) => {
   let { size, type } = rawFile;
-  emit("update:fileList", [...props.fileList, { name: newName, size, type, status: "uploading" }]);
+  if (parseFloat(size) > props.sizeLimit * 1024 * 1024) {
+    emit('onUploadError', `文件大于 ${props.sizeLimit / 1024 / 1024} MB`)
+    return false
+  } else {
+    emit("update:fileList", [...props.fileList, { name: newName, size, type, status: "uploading" }]);
+    return true
+  }
 };
 const afterUploadFile = (rawFile: FileType, newName: string, url: string) => {
   const file = props.fileList.find(file => file.name === newName)
@@ -109,9 +121,12 @@ const afterUploadFile = (rawFile: FileType, newName: string, url: string) => {
 const uploadAjax = (formData: any, success: Function, fail: Function) => {
   const xhr = new XMLHttpRequest();
   xhr.open(props.method, props.action);
-  xhr.onload = (response) => {
-    Math.random() > 0.5 ? success(xhr.response) : fail()
+  xhr.onload = () => {
+    success(xhr.response)
   };
+  xhr.onerror = () => {
+    fail(xhr)
+  }
   xhr.send(formData);
 };
 const uploadFile = (rawFile: any) => {
@@ -126,12 +141,12 @@ const uploadFile = (rawFile: any) => {
       const url = props.parseResponse(response);
       afterUploadFile(rawFile, newName, url)
     },
-    () => {
-      uploadError(newName)
+    (xhr: XMLHttpRequest) => {
+      uploadError(xhr, newName)
     }
   );
 };
-const uploadError = (newName: string) => {
+const uploadError = (xhr: XMLHttpRequest, newName: string) => {
   const file = props.fileList.find(file => file.name === newName)
   const tempFile = JSON.parse(JSON.stringify(file))
   const fileIndex = props.fileList.indexOf(tempFile)
@@ -139,6 +154,11 @@ const uploadError = (newName: string) => {
   const tempFileList = JSON.parse(JSON.stringify(props.fileList))
   tempFileList.splice(fileIndex, 1, tempFile)
   emit("update:fileList", tempFileList);
+  let error = ''
+  if (xhr.status === 0) {
+    error = '网络无法连接'
+  }
+  emit('onUploadError', error)
 }
 
 </script>
