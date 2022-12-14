@@ -40,7 +40,7 @@ const routes = <Array<RouteRecordRaw>>[
       },
       {
         path: "upload",
-        component: () => import("../components/UploadDemo.vue"),
+        component: () => import("../components/upload/UploadDemo.vue"),
       },
     ],
   },
