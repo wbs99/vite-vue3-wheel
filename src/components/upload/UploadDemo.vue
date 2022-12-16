@@ -1,5 +1,5 @@
 <template>
-  <Upload name="file" accept="image/*" method="POST" v-model:fileList="fileList" :sizeLimit="1"
+  <Upload name="file" accept="image/*,video/*" method="POST" v-model:fileList="fileList" :sizeLimit="1"
     @onUploadError="error=$event||'上传失败'" action="http://127.0.0.1:3000/upload" :parseResponse="parseResponse">
     <button>上传</button>
     <template v-slot:tips>
