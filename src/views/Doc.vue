@@ -71,7 +71,12 @@ const routerList = reactive<{ router: string; routerName: string }[]>([
     router: "/doc/upload",
     routerName: "upload 上传",
   },
-  
+  {
+    router: "/doc/cascader",
+    routerName: "cascader 级联选择",
+  },
+
+
 ])
 </script>
 
