@@ -1,6 +1,6 @@
 <template>
   <div class="bar">
-    <div class='bar_inner' :style="`width:${width}%`"></div>
+    <div class='bar_inner' :style="{ width: `${width}%`, backgroundColor }"></div>
   </div>
 </template>
 
@@ -9,6 +9,10 @@ const props = defineProps({
   width: {
     type: Number,
     default: 0
+  },
+  backgroundColor: {
+    type: String,
+    default: '#0075ff'
   }
 })
 </script>
@@ -29,6 +33,5 @@ const props = defineProps({
   height: 100%;
   width:0;
   transition: width 500ms;
-  background-color: #ff4d4f;
 }
 </style>

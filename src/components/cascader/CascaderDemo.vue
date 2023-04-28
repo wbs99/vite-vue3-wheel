@@ -1,12 +1,17 @@
 <template>
   <div>
-    <Cascader :list="dataSource" />
+    <!-- <Cascader :list="dataSource" :selected="selected" @update:selected="selected = $event" popoverHeight="200px" /> -->
+    <Cascader :list="dataSource" popoverHeight="200px" />
+
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
+import { useCascaderStore } from '../../store/useMeStore';
 import Cascader from './Cascader.vue'
+
+const cascaderStore = useCascaderStore()
 
 const dataSource = reactive([
   {
@@ -41,6 +46,7 @@ const dataSource = reactive([
     ]
   }
 ])
+const selected = ref([])
 
 </script>
 

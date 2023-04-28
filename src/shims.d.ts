@@ -3,3 +3,9 @@ declare module "*.vue" {
   const componentOptions: ComponentOptions
   export default componentOptions
 }
+
+
+type Item = {
+  name: string,
+  children?: Item[]
+}

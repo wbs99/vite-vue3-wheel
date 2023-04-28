@@ -1,8 +1,9 @@
 <template>
   {{ fileList }}
   <div class="w-upload" @dragover.prevent @drop.prevent="onDrop">
-    <div @click="onClickUpload">
-      <slot></slot>
+    <div @click="onClickUpload" class="input-area">
+      <!-- <slot></slot> -->
+      Drag&Drop files here
     </div>
     <slot name="tips"></slot>
     <ol class="w-upload-fileList">
@@ -127,7 +128,7 @@ const onProgress = (loaded: number, total: number, rawFile: FileType, newName: s
   const fileIndex = props.fileList.findIndex(file => file.name === newName)
   const tempFile = JSON.parse(JSON.stringify(file))
   const tempFileList = JSON.parse(JSON.stringify(props.fileList))
-  tempFile.progress = loaded / total * 100
+  tempFile.progress = Math.round(loaded / total * 100)
   tempFileList.splice(fileIndex, 1, tempFile)
   emit("update:fileList", tempFileList);
 }
@@ -209,7 +210,6 @@ const onDrop = (e: DragEvent) => {
 
 <style lang="scss" scoped>
 .w-upload{
-  background-color: #a0d5aa;
   &-fileList{
     list-style: none;
     >li{
@@ -237,6 +237,20 @@ const onDrop = (e: DragEvent) => {
       color: red;
     }
   }
+}
+.input-area{
+  border:1px solid red;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  color: #8c8c8c;
+  border: 6px dashed #bfbfbf;
+  border-radius: 16px;
+  user-select: none;
+  cursor: pointer;
 }
 .xxx{
   display: flex;
