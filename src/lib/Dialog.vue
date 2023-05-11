@@ -6,13 +6,14 @@
         <div class="w-dialog">
           <header>
             <slot name="title"></slot>
+            <div class="w-dialog-close" @click="close"></div>
           </header>
           <main>
             <slot name="content"> </slot>
           </main>
           <footer>
-            <Button @click="close">取消</Button>
-            <Button @click="close">确定</Button>
+            <Button @click="close" theme="dashed">取消</Button>
+            <Button @click="onConfirm">确定</Button>
           </footer>
         </div>
       </div>
@@ -32,18 +33,23 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-});
+})
 
-const emit = defineEmits(["update:visible"]);
+const emit = defineEmits(["update:visible", 'onClose', 'onConfirm'])
 
 const close = () => {
-  emit("update:visible", false);
+  emit("update:visible", false)
+  emit('onClose')
 };
 const onClickOverlay = () => {
   if (props.isOverlayCloseable) {
-    close();
+    close()
   }
-};
+}
+const onConfirm = () => {
+  emit("update:visible", false)
+  emit('onConfirm')
+}
 </script>
 
 <style lang="scss" scoped>
@@ -52,6 +58,7 @@ const onClickOverlay = () => {
   min-width: 30em;
   max-width: 90%;
   border-radius: 6px;
+
   &-overlay {
     position: fixed;
     top: 0;
@@ -61,6 +68,7 @@ const onClickOverlay = () => {
     background: fade-out(black, 0.7);
     z-index: 10;
   }
+
   &-wrapper {
     position: fixed;
     left: 50%;
@@ -68,7 +76,8 @@ const onClickOverlay = () => {
     transform: translate(-50%, -50%);
     z-index: 11;
   }
-  > header {
+
+  >header {
     padding: 12px 16px;
     font-size: 18px;
     border-bottom: 1px solid #d9d9d9;
@@ -77,20 +86,24 @@ const onClickOverlay = () => {
     justify-content: space-between;
     align-items: center;
   }
-  > main {
+
+  >main {
     padding: 12px 16px;
   }
-  > footer {
+
+  >footer {
     border-top: 1px solid #d9d9d9;
     padding: 12px 16px;
     text-align: right;
   }
+
   &-close {
     position: relative;
     display: inline-block;
     width: 16px;
     height: 16px;
     cursor: pointer;
+
     &::before,
     &::after {
       content: "";
@@ -101,9 +114,11 @@ const onClickOverlay = () => {
       height: 1px;
       width: 100%;
     }
+
     &::before {
       transform: translate(-50%, -50%) rotate(-45deg);
     }
+
     &::after {
       transform: translate(-50%, -50%) rotate(45deg);
     }

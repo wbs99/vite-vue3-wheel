@@ -1,8 +1,11 @@
 <template>
   <div>
-    <Dialog v-model:visible="x" :isOverlayCloseable="y">
+    <Dialog v-model:visible="dialogVisible" :isOverlayCloseable="isOverlayCloseable" @onConfirm="onConfirm"
+      @onClose="onClose">
       <template v-slot:title>
-        <strong>加粗的标题</strong>
+        <div class="title">
+          <strong>加粗的标题</strong>
+        </div>
       </template>
       <template v-slot:content>
         <strong>加粗的内容</strong>
@@ -18,12 +21,19 @@ import Dialog from "../lib/Dialog.vue";
 import Button from "../lib/Button.vue";
 import { ref } from "vue";
 
-const x = ref(false);
+const dialogVisible = ref(false)
 const openDialog = () => {
-  x.value = true;
+  dialogVisible.value = true
 };
 
-const y = ref(true);
+const isOverlayCloseable = ref(false)
+
+const onClose = () => {
+  console.log('关闭')
+}
+const onConfirm = () => {
+  console.log('确定')
+}
 </script>
 
 <style lang="scss" scoped></style>
